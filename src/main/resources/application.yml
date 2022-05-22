@@ -15,4 +15,5 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: debug
+    org.hibernate.SQL: debug #이걸 써야함 그래야 log로 찍음, show_sql 은 sysout 으로 출력
+    org.hibernate.type: trace
