@@ -29,11 +29,17 @@ public class Category {
     private List<Item> items = new ArrayList<>();
 
     //카테고리 계층구조 어떻게 풀지 잘 보자
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
+
+    //연관관계 편의메서드
+    public void addChildCategory(Category child){
+        this.child.add(child);
+        child.setParent(this);
+    }
 
 }
