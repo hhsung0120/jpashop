@@ -1,0 +1,9 @@
+spring:
+
+logging:
+  level:
+    org.hibernate.SQL: debug #이걸 써야함 그래야 log로 찍음, show_sql 은 sysout 으로 출력
+    org.hibernate.type: trace
+
+
+#딱 이렇게 설정이 있으면 스프링이 기본적으로 메모리 디비로 띄어준다다
