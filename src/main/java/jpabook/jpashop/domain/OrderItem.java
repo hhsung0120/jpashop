@@ -7,10 +7,13 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
+//@NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 프로텍티드 동일
 public class OrderItem {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
     private Long id;
 
@@ -25,4 +28,30 @@ public class OrderItem {
     private int orderPrice;
 
     private int count;
+
+    protected OrderItem() {
+        //@NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 프로텍티드 동일
+    }
+
+    //생성메서드
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count);
+
+        return orderItem;
+
+    }
+
+    //비즈니스 로직
+    public void cancel() {
+        getItem().addStock(count);
+    }
+
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 }

@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -36,7 +39,7 @@ class MemberServiceTest {
         //given
         Member member1 = new Member();
         member1.setName("hshan");
-
+        
         Member member2 = new Member();
         member2.setName("hshan");
 
@@ -51,4 +54,6 @@ class MemberServiceTest {
         //then
         fail("예외가 발생해야 한다.");
     }
+
+
 }
