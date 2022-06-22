@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @Log4j2
@@ -44,4 +45,12 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    @GetMapping("members")
+    public ModelAndView list(){
+        List<Member> members = memberService.findMembers();
+        return new ModelAndView("/members/memberList")
+                .addObject("members", members);
+    }
+
 }
