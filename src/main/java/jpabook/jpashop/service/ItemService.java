@@ -17,6 +17,25 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
 
+    //변경감지
+    @Transactional
+    public Item updateItem(Long itemId, Book param) {
+        Item findItem = itemRepository.findOne(itemId); //영속 상태
+        findItem.setPrice(param.getPrice());
+        findItem.setName(param.getName());
+        findItem.setStockQuantity(param.getStockQuantity());
+        return findItem;
+    }
+
+    @Transactional
+    public Item updateItem(Long itemId, String name, int price, int stockQuantity) {
+        Item findItem = itemRepository.findOne(itemId); //영속 상태
+        findItem.setPrice(price);
+        findItem.setName(name);
+        findItem.setStockQuantity(stockQuantity);
+        return findItem;
+    }
+
     @Transactional
     public void saveItem(Book book) {
         itemRepository.save(book);
@@ -30,4 +49,6 @@ public class ItemService {
     public List<Item> findItems() {
         return itemRepository.findItems();
     }
+
+
 }

@@ -63,7 +63,12 @@ public class ItemController {
         book.setAuthor(form.getAuthor());
         book.setIsbn(form.getIsbn());
 
-        itemService.saveItem(book);
+        //itemService.saveItem(book);
+        itemService.updateItem(itemId, book);
+
+        //더 나은 설계
+        itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
+
         return "redirect:/items";
     }
 
