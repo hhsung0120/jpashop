@@ -48,7 +48,7 @@ public class OrderController {
     }
 
     @PostMapping("/orders/{id}/cancel")
-    public ModelAndView cancle(@PathVariable("id") Long id) {
+    public ModelAndView cancel(@PathVariable("id") Long id) {
         orderService.cancelOrder(id);
         return new ModelAndView("redirect:/orders");
     }
