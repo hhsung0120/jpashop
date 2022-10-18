@@ -6,6 +6,7 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.OrderSimpleQueryDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,9 @@ public class OrderSimpleApiController {
     //실무에선 별도 응답 클래스로 감싸야함
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> orderV2() {
+
+        //Order 2개
+        //N + 1 -> 1 + 회원 N + 배송 N
         List<Order> orders = orderRepository.findAll(new OrderSearch());
         List<SimpleOrderDto> collect = orders.stream()
                 .map(o -> new SimpleOrderDto(o))
@@ -49,15 +53,29 @@ public class OrderSimpleApiController {
         return collect;
     }
 
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> orderV3() {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<SimpleOrderDto> collect = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(Collectors.toList());
+        return collect;
+    }
+
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> orderV4() {
+        return orderRepository.findOrderDtos();
+    }
+
     @Data
-    static class SimpleOrderDto{
+    static class SimpleOrderDto {
         private Long orderId;
         private String name;
         private LocalDateTime orderDate;
         private OrderStatus orderStatus;
         private Address address;
 
-        public SimpleOrderDto(Order order){
+        public SimpleOrderDto(Order order) {
             orderId = order.getId();
             name = order.getMember().getName();
             orderDate = order.getOrderDate();
@@ -65,6 +83,4 @@ public class OrderSimpleApiController {
             address = order.getDelivery().getAddress();
         }
     }
-
-
 }
