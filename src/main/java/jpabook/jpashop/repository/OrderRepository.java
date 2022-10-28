@@ -75,4 +75,27 @@ public class OrderRepository {
 
         return resultList;
     }
+
+    public List<Order> findAllWithItem() {
+        //order가 2개고 orderItems가 4개라서 결과가 4개가 나온다
+        //뻥튀기를 막기 위해서는 select distinct를 써준다 // DB에 distinct 쿼리를 날려주고, JPA 에서 Order의 같은 ID 값이면 하나를 버린다
+        //하이버네이트에 찍힌 쿼리를 그대로 DB날리면 결과 다르다!!!
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch  oi.item i", Order.class)
+                .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                        "select distinct o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d", Order.class)
+                        .setFirstResult(offset)
+                        .setMaxResults(limit)
+                        .getResultList();
+    }
 }
